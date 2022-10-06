@@ -3,13 +3,18 @@ import Chats from './Chats/Chats'
 import SongList from './songList/SongList'
 import ChatBox from './ChatBox/ChatBox'
 import { loadChats, getSongs } from '../API'
+// import { socket } from '../socketService'
 
 let loadingChats = false
 
 export default function Main () {
   const [songList, setSongList] = useState([])
-
   const [chats, setChats] = useState([])
+
+  // socket.on('allSocketId', (data) => {
+  //   console.log('allSocketId')
+  //   console.log(data)
+  // })
 
   useEffect(() => {
     if (!loadingChats) {
@@ -39,7 +44,7 @@ export default function Main () {
         </div>
       </div>
       <div className='bg-red-400 '>
-        <ChatBox />
+        <ChatBox setChats={setChats} chats={chats} />
       </div>
     </div>
   )

@@ -18,3 +18,7 @@ export const socket = io('http://localhost:3001',
     }
 
   })
+
+// socket.on('chat message', (msg) => {
+//   console.log('chat message from someone', msg)
+// })

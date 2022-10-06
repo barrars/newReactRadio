@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Song from './Song'
 // import { cacheSongHandler, deleteSongHandler } from '../../helpers/cacheSongHandlers'
 // import { mainStore } from '../helpers/mainStore'
-export default function SongList (props) {
-  const songList = props.songList
+export default function SongList ({ songList }) {
   const [currentSong, setCurrentSong] = useState('')
   // eslint-disable-next-line no-unused-vars
   const [cachedSongs, setCachedSongs] = useState('fetching')
@@ -12,15 +11,7 @@ export default function SongList (props) {
   // const produrl = 'https://chat-radio.com'
   // let offlineAudio
   // let onlineAudio
-  console.log(songList)
-  useEffect(() => {
-    if (songList.length === 0) {
-      // console.log(`First time ${songList.length} is 0`)
-      // next time
-    } else {
-      // console.log(`SecondTime time ${songList.length} is not 0`)
-    }
-  }, [songList])
+  // console.log(songList)
 
   const songClickHandler = (e) => {
     const song = e.target.innerText
@@ -40,16 +31,11 @@ export default function SongList (props) {
   //         })
   // }
 
-  // this may run a lot
-
   return (
-    // TODO this is the MAIN BODY
     <>
-
       {/* THIS IS THE AUDIO PLAYER */}
       {currentSong && <audio autoPlay controls src={`${produrl}/downloads/${currentSong}`} />}
 
-      {/* RENDER SONG LIST */}
       {songList.length > 0 && songList.map((song, i) =>
         // eslint-disable-next-line no-undef
         <Song key={i} song={song} name={song.fileName} click={songClickHandler} cached={cachedSongs.includes(song.fileName) ? 'Cached' : 'not cachaed'} />)
