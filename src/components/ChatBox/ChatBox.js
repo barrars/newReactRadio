@@ -1,12 +1,11 @@
 import React from 'react'
-import { socket } from '../../socketService'
 
-export default function ChatBox ({ setChats, chats }) {
-  socket.on('chat message', (msg) => {
-    console.log(chats)
-    console.log('chat message from someone', msg)
+export default function ChatBox ({ setChats, chats, socket, username }) {
+  socket?.on('chat message', (msg) => {
+    // console.log(chats)
+    // console.log('chat message from someone', msg)
     setChats([...chats, msg])
-    console.log(chats)
+    // console.log(chats)
   })
 
   const chatHandler = (e) => {

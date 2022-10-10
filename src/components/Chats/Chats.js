@@ -1,18 +1,19 @@
 import React from 'react'
-export default function Chats (props) {
-  const chats = props.chats
-  // load chats
+import { useOnlineStatus } from '../../helpers/useOnlineStatus'
+export default function Chats ({ chats, username, socket }) {
+  const online = useOnlineStatus()
 
   return (
-    <div>
-      {chats.map(chat => <Chat key={chat._id} chat={chat} />)}
+    <div id='chatList' className='col-span-1 bg-slate-300 overflow-x-hidden '>
+
+      {online && chats?.map(chat => <Chat key={chat._id} chat={chat} />)}
+      {!online && <p className='text-2xl text-center'>You are offline</p>}
     </div>
   )
 }
 
 const Chat = ({ chat }) => {
   const { name, message, timestamp, color } = chat
-  // console.log(color)
   return (
     <div className='flex border-b-2 border-black  ' title={new Date(timestamp).toLocaleString()}>
 

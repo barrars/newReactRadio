@@ -1,44 +1,44 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Song from './Song'
-// import { cacheSongHandler, deleteSongHandler } from '../../helpers/cacheSongHandlers'
-// import { mainStore } from '../helpers/mainStore'
-export default function SongList ({ songList }) {
+import { cacheSongHandler, deleteSongHandler } from '../../helpers/cacheSongHandlers'
+import { mainStore } from '../../helpers/mainStore'
+import { useOnlineStatus } from '../../helpers/useOnlineStatus'
+export default function SongList ({ songList, username, socket }) {
+  const online = useOnlineStatus()
+
   const [currentSong, setCurrentSong] = useState('')
-  // eslint-disable-next-line no-unused-vars
   const [cachedSongs, setCachedSongs] = useState('fetching')
-  // const [playCachedSong, setplayCachedSong] = useState('')
+  useEffect(() => {
+    mainStore.keys().then(keys => {
+      console.log('main store ', keys)
+      setCachedSongs(keys)
+    })
+  }, [socket])
+  const [playCachedSong, setplayCachedSong] = useState('')
   const produrl = 'http://localhost:3001/'
   // const produrl = 'https://chat-radio.com'
-  // let offlineAudio
-  // let onlineAudio
-  // console.log(songList)
 
   const songClickHandler = (e) => {
     const song = e.target.innerText
     console.log(song)
-    setCurrentSong(song)
+    online ? setCurrentSong(song) : playCachedSongHandler(song)
   }
 
-  // const playCachedSongHandler = song => {
-  //     console.log(song)
-  //     mainStore.getItem(song)
-  //         .then(data => {
-  //             console.log(
-  //                 typeof (playCachedSong)
-
-  //             )
-  //             setplayCachedSong(URL.createObjectURL(data))
-  //         })
-  // }
+  const playCachedSongHandler = song => {
+    console.log(song)
+    mainStore.getItem(song)
+      .then(data => {
+        setplayCachedSong(URL.createObjectURL(data))
+        console.log(playCachedSong)
+      })
+  }
 
   return (
     <>
-      {/* THIS IS THE AUDIO PLAYER */}
       {currentSong && <audio autoPlay controls src={`${produrl}/downloads/${currentSong}`} />}
-
+    {playCachedSong && <audio autoPlay controls src={playCachedSong} />}
       {songList.length > 0 && songList.map((song, i) =>
-        // eslint-disable-next-line no-undef
-        <Song key={i} song={song} name={song.fileName} click={songClickHandler} cached={cachedSongs.includes(song.fileName) ? 'Cached' : 'not cachaed'} />)
+        <Song key={i} song={song} name={song.fileName} click={songClickHandler} cached={cachedSongs.includes(song.fileName) ? 'Cached' : 'not cachaed'} cacheSongHandler={cacheSongHandler} deleteSongHandler={deleteSongHandler} mainStore={mainStore} setCachedSongs={setCachedSongs} />)
       }
     </>
 

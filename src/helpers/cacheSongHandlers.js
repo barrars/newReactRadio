@@ -5,14 +5,14 @@
  */
 
 export function cacheSongHandler (name, myDB, cacheState) {
-  // console.log(myDB)
-  console.log('RUNNING add SONG to cache')
-  fetch(`https://chat-radio.com/downloads/${name}`)
-  // fetch(`http://localhost:3001/downloads/${name}`)
+  // console.info(myDB)
+  console.info('RUNNING add SONG to cache')
+  // fetch(`https://chat-radio.com/downloads/${name}`)
+  fetch(`http://localhost:3001/downloads/${name}`)
     .then(response => {
-      // response.headers.forEach(console.log);
+      // response.headers.forEach(console.info);
       // for (const entry of response.headers.entries()) {
-      //   console.log(entry)
+      //   console.info(entry)
       // }
       const reader = response.body.getReader()
       return new ReadableStream({
@@ -37,12 +37,12 @@ export function cacheSongHandler (name, myDB, cacheState) {
         .then(song => {
           myDB.setItem(name, song)
             .then(song => {
-              console.log('CACHED ', song)
+              console.info('CACHED ', song)
               myDB.keys()
                 .then(keys => cacheState(keys))
             })
         })
-    }).catch(err => console.error(err))
+    }).catch(err => console.info(err))
 }
 
 /**
@@ -51,11 +51,11 @@ export function cacheSongHandler (name, myDB, cacheState) {
  * @param {LocalForage} myDB
  */
 export function deleteSongHandler (name, myDB, cacheState) {
-  console.log('RUNNING remove from cache')
+  console.info('RUNNING remove from cache')
 
   myDB.removeItem(name)
     .then(() => {
-      console.log('hey is cleared')
+      console.info('hey is cleared')
       myDB.keys().then(keys => {
         cacheState(keys)
       })

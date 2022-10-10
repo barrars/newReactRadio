@@ -3,48 +3,41 @@ import Chats from './Chats/Chats'
 import SongList from './songList/SongList'
 import ChatBox from './ChatBox/ChatBox'
 import { loadChats, getSongs } from '../API'
-// import { socket } from '../socketService'
+import Jukebox from './jukebox/Jukebox'
+import { useOnlineStatus } from '../helpers/useOnlineStatus'
 
 let loadingChats = false
 
-export default function Main () {
+export default function Main ({ username, socket }) {
+  const online = useOnlineStatus()
+
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
-
-  // socket.on('allSocketId', (data) => {
-  //   console.log('allSocketId')
-  //   console.log(data)
-  // })
-
   useEffect(() => {
-    if (!loadingChats) {
+    console.log({ online, loadingChats })
+    if (!loadingChats && online) {
       loadChats(setChats)
       getSongs(setSongList)
     } else {
-      loadingChats = true
+      loadingChats = !!online
     }
-  }, [])
+  }, [online])
 
-  // SCROLL BOTTOM EVERY CHAT UPDATE (effect)
   useEffect(() => {
     document.getElementById('chatList').scrollTo(0, document.getElementById('chatList').scrollHeight)
-  }, [chats.length])
+  }, [chats?.length])
 
   return (
-    <div className='h-screen bg-red-300 grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
-      <div className='bg-slate-400 text-4xl text-center'>
-        ~~JUKEBOX~~
-      </div>
+    <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
+        <Jukebox/>
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
-        <div id='chatList' className='col-span-1 bg-slate-300 overflow-x-hidden '>
-          <Chats chats={chats} />
-        </div>
+          <Chats chats={chats} username={username} socket={socket} />
         <div className='col-span-1 bg-slate-200 overflow-x-hidden  '>
-          <SongList songList={songList} />
+          <SongList songList={songList} username={username} socket={socket} />
         </div>
       </div>
       <div className='bg-red-400 '>
-        <ChatBox setChats={setChats} chats={chats} />
+        <ChatBox setChats={setChats} chats={chats} username={username} socket={socket} />
       </div>
     </div>
   )
