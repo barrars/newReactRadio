@@ -55,12 +55,12 @@ const App = () => {
     <>
       {username === '' &&
         <div className='h-screen  text-center bg-slate-400'>
-          <div className=' bg-slate-200 relative top-1/4 border w-2/4  mx-auto p-8 shadow-2xl'>
+          <div className=' bg-slate-200 rounded-lg relative top-1/4 border w-2/4  mx-auto px-8 py-4 shadow-2xl'>
 
-          <h1 className=''>
+          <h1 className='pb-3 '>
             enter a username
           </h1>
-          <input className='border border-2 border-neutral-600' ref={inputEl} type="text" onKeyDown={(e) => inputName(e, setUsername)} placeholder='enter username and hit enter' />
+          <input className=' border-2 rounded-md  text-center border-neutral-600' ref={inputEl} type="text" onKeyDown={(e) => inputName(e, setUsername)} placeholder='enter username and hit enter' />
           </div>
         </div>}
       {username !== '' && (
