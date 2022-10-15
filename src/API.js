@@ -1,7 +1,6 @@
 import getSonglist from './helpers/getSongList'
 
 export const loadChats = async (setChats) => {
-  console.log(process.env.REACT_APP_API_URL)
   // let chats = await fetch('https://chat-radio.com/chatList')
   const chats = await fetch(`${process.env.REACT_APP_URL}/chatList`).then(res => res.json())
     .catch(err => console.info('errrrrr', err))

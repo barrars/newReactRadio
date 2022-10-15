@@ -17,7 +17,7 @@ const App = () => {
       return
     }
     if (!socket) {
-      socket = io(`${process.env.REACT_APP_URL}`,
+      socket = io(`${process.env.REACT_APP_SOCKET}`,
         {
           reconnection: false,
           query: {
