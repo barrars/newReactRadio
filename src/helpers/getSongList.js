@@ -6,7 +6,7 @@
  */
 export default async function getSongList () {
   try {
-    const songList = await fetch(`http://${process.env.REACT_APP_URL}/songlist`)
+    const songList = await fetch(`${process.env.REACT_APP_URL}/songlist`)
     // const songList = await fetch('https://chat-radio.com/songlist')
     const jsonSongList = await songList.json()
 
