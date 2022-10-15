@@ -5,6 +5,7 @@ import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
 
 const App = () => {
+  console.log(process.env.REACT_APP_URL)
   let socket = null
   const [username, setUsername] = useState('')
   const [user, setUser] = useState(null)
@@ -17,7 +18,7 @@ const App = () => {
       return
     }
     if (!socket) {
-      socket = io('http://localhost:3001',
+      socket = io(`http://${process.env.REACT_APP_URL}`,
         {
           reconnection: false,
           query: {

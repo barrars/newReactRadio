@@ -15,7 +15,7 @@ export default function SongList ({ songList, username, socket }) {
     })
   }, [socket])
   const [playCachedSong, setplayCachedSong] = useState('')
-  const produrl = 'http://localhost:3001/'
+  const produrl = `http://${process.env.REACT_APP_URL}`
   // const produrl = 'https://chat-radio.com'
 
   const songClickHandler = (e) => {
