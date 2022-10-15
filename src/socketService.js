@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client'
 
-export const socket = io(`http://${process.env.REACT_APP_URL}`,
+export const socket = io(`${process.env.REACT_APP_URL}`,
   {
     query: {
       name: 'scott'
