@@ -3,9 +3,9 @@ import Song from './Song'
 import { cacheSongHandler, deleteSongHandler } from '../../helpers/cacheSongHandlers'
 import { mainStore } from '../../helpers/mainStore'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
+
 export default function SongList ({ songList, username, socket }) {
   const online = useOnlineStatus()
-
   const [currentSong, setCurrentSong] = useState('')
   const [cachedSongs, setCachedSongs] = useState('fetching')
   useEffect(() => {
