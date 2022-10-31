@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 .vscode/launch.json
 src/helpers/getSongList.js
-# .env
+.env
 notes
