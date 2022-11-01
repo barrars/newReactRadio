@@ -28,6 +28,6 @@ notes
 ./notes
 notes
 .env
-**/.env
+**/*.env
 ./.env
 
