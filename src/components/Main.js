@@ -25,7 +25,7 @@ export default function Main ({ username, socket }) {
 
   useEffect(() => {
     document.getElementById('chatList').scrollTo(0, document.getElementById('chatList').scrollHeight)
-  }, [chats?.length])
+  }, [chats?.length, online])
 
   return (
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>

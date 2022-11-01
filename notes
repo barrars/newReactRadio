@@ -5,3 +5,7 @@ set username of socket in localstorage
 
 
 socket connects over http
+
+
+note working:
+  loading local store songs when offline
