@@ -25,3 +25,10 @@ yarn-error.log*
 src/helpers/getSongList.js
 .env
 notes
+./notes
+notes
+.env
+**/*.env
+./.env
+
+.env

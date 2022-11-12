@@ -60,7 +60,7 @@ const App = () => {
           <h1 className='pb-3 '>
             enter a username
           </h1>
-          <input className=' border-2 rounded-md  text-center border-neutral-600' ref={inputEl} type="text" onKeyDown={(e) => inputName(e, setUsername)} placeholder='enter username and hit enter' />
+          <input className=' border-2 rounded-md  text-center border-neutral-400 focus:border-red-500' ref={inputEl} type="text" onKeyDown={(e) => inputName(e, setUsername)} placeholder='enter username and hit enter' />
           </div>
         </div>}
       {username !== '' && (

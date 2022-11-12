@@ -9,7 +9,7 @@ export default function ChatBox ({ setChats, chats, socket, username }) {
   })
 
   const chatHandler = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value !== '') {
       const message = e.target.value
       socket.emit('chat', message)
       e.target.value = ''

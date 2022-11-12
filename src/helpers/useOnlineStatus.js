@@ -15,7 +15,7 @@ export default function OnlineStatusProvider ({ children }) {
   })
 
   return (
-    <OnlineStatusContext.Provider value={useState(navigator.onLine)}>
+    <OnlineStatusContext.Provider value={onlineStatus}>
       {children}
     </OnlineStatusContext.Provider>)
 }

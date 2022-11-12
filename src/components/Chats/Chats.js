@@ -6,8 +6,8 @@ export default function Chats ({ chats, username, socket }) {
   return (
     <div id='chatList' className='col-span-1 bg-slate-300 overflow-x-hidden '>
 
-      {online && chats?.map(chat => <Chat key={chat._id} chat={chat} />)}
       {!online && <p className='text-2xl text-center'>You are offline</p>}
+      {online && chats?.map(chat => <Chat key={chat._id} chat={chat} />)}
     </div>
   )
 }
