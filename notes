@@ -1,11 +1,6 @@
-caching seems to work
-
 set username of socket in localstorage
 
-
-
-socket connects over http
-
+  prevent spaces being sent as messages
 
 note working:
   loading local store songs when offline
