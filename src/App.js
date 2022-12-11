@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Main from './components/Main'
-import { io } from 'socket.io-client'
 import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
-
+import useSocket from './hooks/useSocket'
+// import socket from './socketService'
 const App = () => {
-  let socket = null
+  const socket = useSocket()
   const [username, setUsername] = useState('')
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
   const online = useOnlineStatus()
   const inputEl = useRef(null)
   useEffect(() => {
@@ -16,21 +16,20 @@ const App = () => {
     if (!username) {
       return
     }
-    if (!socket) {
-      socket = io(`${process.env.REACT_APP_SOCKET}`,
-        {
-          reconnection: false,
-          query: {
-            name: username
-          }
-        })
-    }
+    // if (!socket) {
+    //   socket = io(`${process.env.REACT_APP_SOCKET}`,
+    //     {
+    //       query: {
+    //         name: username
+    //       }
+    //     })
+    // }
     socket.username = username
     socket.on('connect', () => {
-      setUser(socket)
+      // setUser(socket)
       console.info(socket.id)
       console.info('connected')
-      socket.emit('join', socket.username)
+      socket.emit('join', socket.username, (res) => console.log({ res }))
     })
     socket.on('connect_error', () => {
       console.info('connection error, failed to connect')
@@ -65,7 +64,7 @@ const App = () => {
         </div>}
       {username !== '' && (
         <div>
-          <Main username={username} socket={user} />
+          <Main username={username} />
         </div>
       )}
 

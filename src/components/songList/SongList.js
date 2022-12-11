@@ -3,8 +3,9 @@ import Song from './Song'
 import { cacheSongHandler, deleteSongHandler } from '../../helpers/cacheSongHandlers'
 import { mainStore } from '../../helpers/mainStore'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
+// import Socket from '../../socketService'
 
-export default function SongList ({ songList, username, socket }) {
+export default function SongList ({ songList, username }) {
   const online = useOnlineStatus()
   const [currentSong, setCurrentSong] = useState('')
   const [cachedSongs, setCachedSongs] = useState([])
@@ -13,7 +14,7 @@ export default function SongList ({ songList, username, socket }) {
       console.log('main store ', keys)
       setCachedSongs(keys)
     })
-  }, [socket])
+  }, [])
   const [playCachedSong, setplayCachedSong] = useState('')
   const produrl = `${process.env.REACT_APP_URL}`
   // const produrl = 'https://chat-radio.com'

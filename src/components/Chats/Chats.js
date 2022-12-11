@@ -1,13 +1,15 @@
 import React from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
-export default function Chats ({ chats, username, socket }) {
+// import Socket from '../../socketService'
+
+export default function Chats ({ chats, username }) {
   const online = useOnlineStatus()
 
   return (
     <div id='chatList' className='col-span-1 bg-slate-300 overflow-x-hidden '>
 
       {!online && <p className='text-2xl text-center'>You are offline</p>}
-      {online && chats?.map(chat => <Chat key={chat._id} chat={chat} />)}
+      {online && chats?.map((chat, i) => <Chat key={i} chat={chat} />)}
     </div>
   )
 }

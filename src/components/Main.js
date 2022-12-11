@@ -8,7 +8,7 @@ import { useOnlineStatus } from '../helpers/useOnlineStatus'
 
 let loadingChats = false
 
-export default function Main ({ username, socket }) {
+export default function Main ({ username }) {
   const online = useOnlineStatus()
 
   const [songList, setSongList] = useState([])
@@ -31,13 +31,13 @@ export default function Main ({ username, socket }) {
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
         <Jukebox/>
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
-          <Chats chats={chats} username={username} socket={socket} />
+          <Chats chats={chats} username={username} />
         <div className='col-span-1 bg-slate-200 overflow-x-hidden  '>
-          <SongList songList={songList} username={username} socket={socket} />
+          <SongList songList={songList} username={username} />
         </div>
       </div>
       <div className='bg-red-400 '>
-        <ChatBox setChats={setChats} chats={chats} username={username} socket={socket} />
+        <ChatBox setChats={setChats} chats={chats} username={username} />
       </div>
     </div>
   )
