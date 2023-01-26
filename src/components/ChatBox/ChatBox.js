@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-import useSocket from '../../hooks/useSocket'
+import socket from '../../socket/socket'
 // import socket from '../../socketService'
 
 export default function ChatBox ({ setChats, chats, username }) {
-  const socket = useSocket()
   useEffect(() => {
     socket?.on('chat message', (msg) => {
       console.log(msg)
@@ -24,8 +23,18 @@ export default function ChatBox ({ setChats, chats, username }) {
   const chatHandler = (e) => {
     if (e.key === 'Enter' && e.target.value !== '') {
       const message = e.target.value
-      socket.emit('chat', message, msg => setChats([...chats, msg])
-      )
+      fetch(process.env.REACT_APP_URL + '/chatList', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, message })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+        })
+      // socket.emit('chat', message, msg => setChats([...chats, msg]))
       e.target.value = ''
     }
   }

@@ -2,37 +2,39 @@ import React, { useEffect, useRef, useState } from 'react'
 import Main from './components/Main'
 import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
-import useSocket from './hooks/useSocket'
+import socket from './socket/socket'
 // import socket from './socketService'
 const App = () => {
-  const socket = useSocket()
   const [username, setUsername] = useState('')
-  // const [user, setUser] = useState(null)
   const online = useOnlineStatus()
   const inputEl = useRef(null)
+  // useEffect(() => {
+  //   socket.on('connect', (data) => {
+  //     // setUser(socket)
+  //     console.log(socket)
+  //     socket.username = username
+  //     console.log('id = ' + socket.id + ' connected')
+  //     console.log(data)
+  //     // console.log('username = ' + socket.username)
+  //   })
+  // }, [username])
   useEffect(() => {
-    console.info({ online, socket })
     inputEl?.current?.focus()
     if (!username) {
       return
     }
-    // if (!socket) {
-    //   socket = io(`${process.env.REACT_APP_SOCKET}`,
-    //     {
-    //       query: {
-    //         name: username
-    //       }
-    //     })
-    // }
-    socket.username = username
-    socket.on('connect', () => {
-      // setUser(socket)
-      console.info(socket.id)
-      console.info('connected')
+    // socket.connect(username)
+    if (username !== '' && online) {
+      socket.username = username
+      console.log(socket.username)
+      console.log(socket.data)
       socket.emit('join', socket.username, (res) => console.log({ res }))
-    })
+      // socket.on('test', (data) => {
+      //   console.log('test', data)
+      // })
+    }
     socket.on('connect_error', () => {
-      console.info('connection error, failed to connect')
+      console.log('connection error, failed to connect')
       socket.disconnect()
       socket.close()
       socket.removeAllListeners()
@@ -43,11 +45,11 @@ const App = () => {
 
     return () => {
       socket.off('connect_error')
-      console.info('disconnecting')
+      console.log('disconnecting')
       socket.off('connect')
       socket.off('disconnect')
     }
-  }, [username, online])
+  }, [username, online, socket])
 
   return (
 
@@ -57,7 +59,7 @@ const App = () => {
           <div className=' bg-slate-200 rounded-lg relative top-1/4 border w-2/4  mx-auto px-8 py-4 shadow-2xl'>
 
           <h1 className='pb-3 '>
-            enter a username
+            enter a username!
           </h1>
           <input className=' border-2 rounded-md  text-center border-neutral-400 focus:border-red-500' ref={inputEl} type="text" onKeyDown={(e) => inputName(e, setUsername)} placeholder='enter username and hit enter' />
           </div>
@@ -67,7 +69,6 @@ const App = () => {
           <Main username={username} />
         </div>
       )}
-
     </>
   )
 }

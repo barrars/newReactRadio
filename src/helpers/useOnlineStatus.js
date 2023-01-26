@@ -3,7 +3,7 @@ const OnlineStatusContext = createContext(true)
 
 export default function OnlineStatusProvider ({ children }) {
   const [onlineStatus, setOnlineStatus] = useState(navigator.onLine)
-  console.info('onlineStatus', onlineStatus)
+  // console.info('onlineStatus', onlineStatus)
   useEffect(() => {
     window.addEventListener('online', () => setOnlineStatus(true))
     window.addEventListener('offline', () => setOnlineStatus(false))

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>React App</title>
+  </head>
+
+  <body>
+    <video id="video" controls></video>
+    <script>
+      if (Hls.isSupported()) {
+        var video = document.getElementById('video');
+        var hls = new Hls();
+        hls.loadSource(
+          'https://n3bb-e2.revma.ihrhls.com/zc1965/59_1h1d8ui6wctpx02/playlist.m3u8?zip=98684&callLetters=KPOJ-AM&country=US&rj-ttl=5&streamid=1965&site-url=https%3A%2F%2Fwww.iheart.com%2Flive%2Frip-city-radio-1965%2F&dist=iheart&partnertok=eyJraWQiOiJpaGVhcnQiLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsc2lkIjoiY29va2llOjhjYzg2YWI3LTEzMTAtNGNjMC04MWZlLWJhMTdiMzI3NDg3NCIsImF1ZCI6InRkIiwic3ViIjoiMTc2Nzc2NjM1OCIsImNvcHBhIjowLCJpc3MiOiJpaGVhcnQiLCJ1c19wcml2YWN5IjoiMVlOTiIsImRpc3QiOiJpaGVhcnQiLCJleHAiOjE2NzQ3MzQ0ODIsImlhdCI6MTY3NDY0ODA4Miwib21pZCI6MH0.imm-mTuTsuhHtUOVJvkxKUasdmPVDGjwyZvz834zIbQ&terminalid=159&locale=en-US&rj-tok=AAABhejv714AMTff9sXNjqpl-Q&clientType=web&modTime=1674648081800&profileid=1767766358&triton-uid=cookie%3A8cc86ab7-1310-4cc0-81fe-ba17b3274874&host=webapp.US&us_privacy=1-N-&devicename=web-desktop&subscription_type=free&territory=US&stationid=1965'
+        );
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src =
+          'https://n3bb-e2.revma.ihrhls.com/zc1965/59_1h1d8ui6wctpx02/playlist.m3u8?zip=98684&callLetters=KPOJ-AM&country=US&rj-ttl=5&streamid=1965&site-url=https%3A%2F%2Fwww.iheart.com%2Flive%2Frip-city-radio-1965%2F&dist=iheart&partnertok=eyJraWQiOiJpaGVhcnQiLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsc2lkIjoiY29va2llOjhjYzg2YWI3LTEzMTAtNGNjMC04MWZlLWJhMTdiMzI3NDg3NCIsImF1ZCI6InRkIiwic3ViIjoiMTc2Nzc2NjM1OCIsImNvcHBhIjowLCJpc3MiOiJpaGVhcnQiLCJ1c19wcml2YWN5IjoiMVlOTiIsImRpc3QiOiJpaGVhcnQiLCJleHAiOjE2NzQ3MzQ0ODIsImlhdCI6MTY3NDY0ODA4Miwib21pZCI6MH0.imm-mTuTsuhHtUOVJvkxKUasdmPVDGjwyZvz834zIbQ&terminalid=159&locale=en-US&rj-tok=AAABhejv714AMTff9sXNjqpl-Q&clientType=web&modTime=1674648081800&profileid=1767766358&triton-uid=cookie%3A8cc86ab7-1310-4cc0-81fe-ba17b3274874&host=webapp.US&us_privacy=1-N-&devicename=web-desktop&subscription_type=free&territory=US&stationid=1965';
+        video.addEventListener('canplay', function () {
+          video.play();
+        });
+      }
+    </script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- <div id="root"></div> -->
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+
+</html>

@@ -5,6 +5,7 @@ import ChatBox from './ChatBox/ChatBox'
 import { loadChats, getSongs } from '../API'
 import Jukebox from './jukebox/Jukebox'
 import { useOnlineStatus } from '../helpers/useOnlineStatus'
+// import socket from '../socket/socket'
 
 let loadingChats = false
 
@@ -13,8 +14,9 @@ export default function Main ({ username }) {
 
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
+
   useEffect(() => {
-    console.log({ online, loadingChats })
+    // console.log({ online, loadingChats })
     if (!loadingChats && online) {
       loadChats(setChats)
       getSongs(setSongList)
@@ -29,9 +31,11 @@ export default function Main ({ username }) {
 
   return (
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
-        <Jukebox/>
+
+      <Jukebox setSongList={setSongList} songList={songList} />
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
-          <Chats chats={chats} username={username} />
+        <Chats chats={chats} username={username} />
+
         <div className='col-span-1 bg-slate-200 overflow-x-hidden  '>
           <SongList songList={songList} username={username} />
         </div>

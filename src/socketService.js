@@ -4,10 +4,12 @@ const Events = {}
 
 const Socket = {
   socket: null,
-  connect () {
+  connect (name) {
+    console.log('connecting')
     if (this.socket) return
     // this.socket = io(process.env.REACT_APP_STOCK_DATA_URL);
     this.socket = io(process.env.REACT_APP_SOCKET)
+    this.socket.userName = name
   },
   connected: false,
   emit: function (event, data, fn) {
@@ -31,7 +33,7 @@ const Socket = {
 }
 
 Socket.connect()
-Socket.on('connect', () => console.log('Websocket connected'))
+// Socket.on('connect', () => console.log('Websocket connected'))
 
 export default Socket
 
@@ -42,8 +44,3 @@ export default Socket
 //       name: 'scott'
 //     }
 //   })
-
-// export { socket }
-
-// console.log(socket.id)
-// console.log('socketservice')
