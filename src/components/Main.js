@@ -11,7 +11,7 @@ let loadingChats = false
 
 export default function Main ({ username }) {
   const online = useOnlineStatus()
-
+  const [chatRoom, setchatRoom] = useState('main')
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
 
@@ -32,7 +32,7 @@ export default function Main ({ username }) {
   return (
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
 
-      <Jukebox setSongList={setSongList} songList={songList} />
+      <Jukebox chatRoom={chatRoom} setchatRoom={setchatRoom} setSongList={setSongList} songList={songList} />
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
         <Chats chats={chats} username={username} />
 
@@ -41,7 +41,7 @@ export default function Main ({ username }) {
         </div>
       </div>
       <div className='bg-red-400 '>
-        <ChatBox setChats={setChats} chats={chats} username={username} />
+        <ChatBox chatRoom={chatRoom} setChats={setChats} chats={chats} username={username} />
       </div>
     </div>
   )

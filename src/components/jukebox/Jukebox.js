@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
 import socket from '../../socket/socket'
 
-export default function Jukebox ({ setSongList, songList }) {
+export default function Jukebox ({ setSongList, songList, chatRoom, setchatRoom }) {
   const roomInput = useRef(null)
   useEffect(() => {
     socket.on('test', (data) => {
@@ -63,12 +63,16 @@ export default function Jukebox ({ setSongList, songList }) {
     }
   }
 
-  const click = () => {
-    console.log(songList)
-    // console.log(roomInput.current.value)
+  const enterRoom = () => {
     const room = roomInput.current.value
     if (room !== '') {
-      console.log('enterRoom!', room)
+      console.log('emit join-room with data: ', room)
+      socket.emit('join-room', room, (res) => {
+        console.log(res)
+        setchatRoom(res.room)
+      })
+    } else {
+      console.log(`room must not be an empty string like '${room}'`)
     }
     // socket.emit('click', { socket: socket.id }, (res) => {
     //   console.log(res)
@@ -96,7 +100,8 @@ export default function Jukebox ({ setSongList, songList }) {
         disabled={downloading}
       />
       <input onKeyDown={(e) => roomKeyDown(e) } className=' bg-slate-200 m-2 rounded-md' ref={roomInput} type="text" placeholder='enter room' />
-      <button className='bg-gray-300 m-2 px-3 rounded-md border border-blue-400 text-lg font-mono' onClick={click}>
+      <button className='bg-gray-300 m-2 px-3 rounded-md border border-blue-400 text-lg font-mono'
+        onClick={enterRoom}>
         enter
       </button>
       <p className={` h-2 w-2 rounded-full ${online ? 'bg-green-500' : 'bg-red-500'}`}/>

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import socket from '../../socket/socket'
 // import socket from '../../socketService'
 
-export default function ChatBox ({ setChats, chats, username }) {
+export default function ChatBox ({ setChats, chats, username, chatRoom }) {
   useEffect(() => {
     socket?.on('chat message', (msg) => {
-      console.log(msg)
+      console.log(`received message via sockets from: ${msg.username}`)
       setChats([...chats, msg])
     })
     socket?.on('roommsg', (msg) => {
@@ -28,13 +28,16 @@ export default function ChatBox ({ setChats, chats, username }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, message })
+        body: JSON.stringify({ username, message, chatRoom })
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
+          if (data.msg === 'saved') {
+            console.log('success')
+            return
+          }
+          console.log(`your msg posted succesfully via post: ${JSON.stringify(data)}`)
         })
-      // socket.emit('chat', message, msg => setChats([...chats, msg]))
       e.target.value = ''
     }
   }

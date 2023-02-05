@@ -8,16 +8,15 @@ const App = () => {
   const [username, setUsername] = useState('')
   const online = useOnlineStatus()
   const inputEl = useRef(null)
-  // useEffect(() => {
-  //   socket.on('connect', (data) => {
-  //     // setUser(socket)
-  //     console.log(socket)
-  //     socket.username = username
-  //     console.log('id = ' + socket.id + ' connected')
-  //     console.log(data)
-  //     // console.log('username = ' + socket.username)
-  //   })
-  // }, [username])
+  useEffect(() => {
+    socket.on('connect', (data) => {
+      // setUser(socket)
+      console.log(socket)
+      socket.username = username
+      console.log('id = ' + socket.id + ' connected')
+      console.log('username = ' + socket.username)
+    })
+  }, [username])
   useEffect(() => {
     inputEl?.current?.focus()
     if (!username) {
