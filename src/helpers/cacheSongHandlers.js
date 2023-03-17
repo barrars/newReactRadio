@@ -51,11 +51,11 @@ export function cacheSongHandler (name, myDB, cacheState) {
  * @param {LocalForage} myDB
  */
 export function deleteSongHandler (name, myDB, cacheState) {
-  console.info('RUNNING remove from cache')
+  console.info('RUNNING remove from cache ', name)
 
   myDB.removeItem(name)
     .then(() => {
-      console.info('hey is cleared')
+      console.info(`removed ${name} from cache`)
       myDB.keys().then(keys => {
         cacheState(keys)
       })

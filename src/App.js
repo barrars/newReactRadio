@@ -9,12 +9,9 @@ const App = () => {
   const online = useOnlineStatus()
   const inputEl = useRef(null)
   useEffect(() => {
-    socket.on('connect', (data) => {
-      // setUser(socket)
-      console.log(socket)
+    socket.on('connect', () => {
       socket.username = username
       console.log('id = ' + socket.id + ' connected')
-      console.log('username = ' + socket.username)
     })
   }, [username])
   useEffect(() => {
@@ -26,11 +23,9 @@ const App = () => {
     if (username !== '' && online) {
       socket.username = username
       console.log(socket.username)
-      console.log(socket.data)
-      socket.emit('join', socket.username, (res) => console.log({ res }))
-      // socket.on('test', (data) => {
-      //   console.log('test', data)
-      // })
+      // console.log(socket.data)
+      socket.emit('join', socket.username,
+        res => console.log({ res }))
     }
     socket.on('connect_error', () => {
       console.log('connection error, failed to connect')
@@ -44,6 +39,7 @@ const App = () => {
 
     return () => {
       socket.off('connect_error')
+      socket.off('join')
       console.log('disconnecting')
       socket.off('connect')
       socket.off('disconnect')
