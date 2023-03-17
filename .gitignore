@@ -27,10 +27,3 @@ src/helpers/getSongList.js
 notes
 ./notes
 notes
-.env
-**/*.env
-./.env
-
-/.env
-.env
-.env
