@@ -1,31 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
-import socket from '../../socket/socket'
+// import socket from '../../socket/socket'
+import useSocket from '../../hooks/useSocket'
 
-export default function Jukebox ({ setSongList, songList, chatRoom, setchatRoom }) {
-  const roomInput = useRef(null)
-  useEffect(() => {
-    socket.on('test', (data) => {
-      console.log('test', data)
-    })
-    return () => {
-      socket.off('test')
-    }
-  }, [])
+export default function Jukebox ({ setSongList, songList, chatRooms, setchatRooms }) {
+  const roomRef = useRef(null)
+  const socket = useSocket()
 
-  useEffect(() => {
-    socket.on('song', ({ song }) => {
-      console.log('song', { song, status })
-      console.log('songList', songList)
-      setSongList([...songList, song])
-    })
-    socket.on('click', (data) => {
-      console.log('click', data)
-    })
-    socket.on('eta', (data) => {
-      console.log('eta', data)
-    })
-  }, [socket, songList])
+  // useEffect(() => {
+  //   socket.on('song', ({ song }) => {
+  //     console.log('song', { song, status })
+  //     console.log('songList', songList)
+  //     setSongList([...songList, song])
+  //   })
+  //   socket.on('click', (data) => {
+  //     console.log('click', data)
+  //   })
+  //   socket.on('eta', (data) => {
+  //     console.log('eta', data)
+  //   })
+  // }, [socket, songList])
   const online = useOnlineStatus()
   const [downloading, setDownloading] = useState(false)
   const search = (e) => {
@@ -63,32 +57,38 @@ export default function Jukebox ({ setSongList, songList, chatRoom, setchatRoom 
     }
   }
 
-  const enterRoom = () => {
-    const room = roomInput.current.value
-    if (room !== '') {
-      console.log('emit join-room with data: ', room)
-      socket.emit('join-room', room, (res) => {
-        console.log(res)
-        setchatRoom(res.room)
-      })
-    } else {
-      console.log(`room must not be an empty string like '${room}'`)
-    }
-    // socket.emit('click', { socket: socket.id }, (res) => {
-    //   console.log(res)
-    // })
+  const enterRoom = (e) => {
+    roomRef.current.value = e.target.value
+    console.log(roomRef.current.value)
+    if (e.key === 'Enter') {
+      const room = roomRef.current.value
+      if (room !== '') {
+        console.log('emit join-room with data: ', room)
+        socket?.emit('joinRoom', room, (room) => {
+          console.log(room)
+          setchatRooms([...chatRooms, room])
+        })
+      } else {
+        console.log(`room must not be an empty string like '${room}'`)
+      }
+      // socket.emit('click', { socket: socket.id }, (res) => {
+      //   console.log(res)
+      // })
 
     // socket.emit('join-room', `dynamic-${num}`, (res) => {
     //   console.log(res)
     // })
-  }
-  const roomKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      const room = roomInput.current.value
-      if (room !== '') {
-        console.log('enterRoom!', room)
-      }
+    } else if (e.key === 'Escape') {
+      roomRef.current.value = ''
     }
+  }
+  const btnClick = () => {
+    const room = roomRef.current.value
+    console.log(roomRef.current.value)
+    socket?.emit('joinRoom', room, (room) => {
+      console.log(room)
+      setchatRooms([...chatRooms, room])
+    })
   }
   return (
     <div className='content-center flex  text-center row-span-2'>
@@ -99,9 +99,9 @@ export default function Jukebox ({ setSongList, songList, chatRoom, setchatRoom 
         placeholder={`${downloading ? 'Downloading...' : 'Search for a song'}`}
         disabled={downloading}
       />
-      <input onKeyDown={(e) => roomKeyDown(e) } className=' bg-slate-200 m-2 rounded-md' ref={roomInput} type="text" placeholder='enter room' />
+      <input ref={roomRef} onKeyDown={(e) => enterRoom(e) } className=' bg-slate-200 m-2 rounded-md' type="text" placeholder='enter room' />
       <button className='bg-gray-300 m-2 px-3 rounded-md border border-blue-400 text-lg font-mono'
-        onClick={enterRoom}>
+        onClick={btnClick}>
         enter
       </button>
       <p className={` h-2 w-2 rounded-full ${online ? 'bg-green-500' : 'bg-red-500'}`}/>

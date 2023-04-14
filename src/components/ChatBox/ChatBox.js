@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import socket from '../../socket/socket'
-// import socket from '../../socketService'
+import useSocket from '../../hooks/useSocket'
 
-export default function ChatBox ({ setChats, chats, username, chatRoom }) {
+export default function ChatBox ({ setChats, chats, username, chatRooms }) {
+  const socket = useSocket()
   useEffect(() => {
     socket?.on('chat message', (msg) => {
       console.log(`received message via sockets from: ${msg.username}`)
@@ -28,7 +28,7 @@ export default function ChatBox ({ setChats, chats, username, chatRoom }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, message, chatRoom })
+        body: JSON.stringify({ username, message, chatRooms })
       })
         .then(res => res.json())
         .then(data => {

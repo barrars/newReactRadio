@@ -1,50 +1,52 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react'
 import Main from './components/Main'
 import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
-import socket from './socket/socket'
-// import socket from './socketService'
+import useSocket from './hooks/useSocket'
 const App = () => {
+  const socket = useSocket()
   const [username, setUsername] = useState('')
   const online = useOnlineStatus()
   const inputEl = useRef(null)
   useEffect(() => {
-    socket.on('connect', () => {
+    inputEl?.current?.focus()
+    // if (!socket) return
+    if (!username) return
+    socket?.on('connect', () => {
       socket.username = username
       console.log('id = ' + socket.id + ' connected')
     })
   }, [username])
-  useEffect(() => {
-    inputEl?.current?.focus()
-    if (!username) {
-      return
-    }
-    // socket.connect(username)
-    if (username !== '' && online) {
-      socket.username = username
-      console.log(socket.username)
-      // console.log(socket.data)
-      socket.emit('join', socket.username,
-        res => console.log({ res }))
-    }
-    socket.on('connect_error', () => {
-      console.log('connection error, failed to connect')
-      socket.disconnect()
-      socket.close()
-      socket.removeAllListeners()
-    })
-    socket.on('disconnect', () => {
-      console.log('DISCONNECTED')
-    })
 
-    return () => {
-      socket.off('connect_error')
-      socket.off('join')
-      console.log('disconnecting')
-      socket.off('connect')
-      socket.off('disconnect')
-    }
-  }, [username, online, socket])
+  // useEffect(() => {
+  //   // socket.connect(username)
+  //   if (username !== '' && online) {
+  //     socket.username = username
+  //     console.log(socket.username)
+  //     // console.log(socket.data)
+  //     socket.emit('join', socket.username,
+  //       res => console.log({ res }))
+  //   }
+  //   socket.on('connect_error', (err) => {
+  //     console.log('connection error, failed to connect')
+  //     console.log(err)
+  //     socket.disconnect()
+  //     socket.close()
+  //     socket.removeAllListeners()
+  //   })
+  //   socket.on('disconnect', () => {
+  //     console.log('DISCONNECTED')
+  //   })
+
+  //   return () => {
+  //     socket.off('connect_error')
+  //     socket.off('join')
+  //     console.log('disconnecting')
+  //     socket.off('connect')
+  //     socket.off('disconnect')
+  //   }
+  // }, [username, online, socket])
 
   return (
 
