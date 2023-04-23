@@ -15,36 +15,36 @@ import App from './App'
 import Main from './components/Main'
 // import { action as destroyAction } from './routes/destroy'
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
-const router = createBrowserRouter([{
-  path: '/',
-  element: <App />,
-  // element: <Root />,
-  errorElement: <ErrorPage />,
-  loader: rootLoader,
-  action: rootAction,
-  children: [{
-    path: '/:room',
-    element: <Main/>
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    // element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [{
+      path: '/:room',
+      element: <Main/>
     // loader: contactLoader,
     // action: constactAction
-  },
-  // {
-  //   path: '/contacts/:contactId/destroy',
-  //   action: destroyAction,
-  //   errorElement: <div>Oops! there was an error</div>
-  // },
-  {
-    path: '/contacts/:contactId/edit',
-    element: <EditContact/>,
-    // loader: contactLoader,
-    action: editAction
-  },
-  {
-    index: true,
-    element: <Index/>
-  }]
-}
+    },
+    // {
+    //   path: '/contacts/:contactId/destroy',
+    //   action: destroyAction,
+    //   errorElement: <div>Oops! there was an error</div>
+    // },
+    {
+      path: '/contacts/:contactId/edit',
+      element: <EditContact/>,
+      // loader: contactLoader,
+      action: editAction
+    },
+    {
+      index: true,
+      element: <Index/>
+    }]
+  }
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

@@ -55,6 +55,7 @@ const App = () => {
       {username !== '' && (
         <div>
           <output/>
+          <a href="/contacts">contacts</a>
 
           <Main username={username} room={UseRooms}/>
         </div>
