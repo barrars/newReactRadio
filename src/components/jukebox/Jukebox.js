@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
-// import socket from '../../socket/socket'
 import useSocket from '../../hooks/useSocket'
+import UseRooms from '../../hooks/UseRooms'
 
-export default function Jukebox ({ setSongList, songList, chatRooms, setchatRooms }) {
+export default function Jukebox ({ setSongList, songList }) {
   const roomRef = useRef(null)
   const socket = useSocket()
+  // UseRooms
+  const { rooms, setRooms } = UseRooms()
 
   // useEffect(() => {
   //   socket.on('song', ({ song }) => {
@@ -38,20 +40,8 @@ export default function Jukebox ({ setSongList, songList, chatRooms, setchatRoom
       })
         .then((res) => res.json())
         .then((data) => {
-          // const newSong = {
-          //   _id: '63cf9015a93d5ea44efd0a95',
-          //   title: 'teen spirit',
-          //   fileName: 'teen spirit',
-          //   plays: 0,
-          //   fileSlug: '7fc20360-786a-429a-96d6-19fee42c3788',
-          //   createdBy: 'rambo',
-          //   downloaded: '2023-01-10T08:34:08.357Z',
-          //   deleted: false,
-          //   lastPlayed: '2023-01-24T08:00:21.982Z',
-          //   __v: 0
-          // }
           console.log(data)
-          // setSongList([...songList, newSong])
+          setSongList([...songList, data])
           setDownloading(false)
         })
     }
@@ -66,7 +56,7 @@ export default function Jukebox ({ setSongList, songList, chatRooms, setchatRoom
         console.log('emit join-room with data: ', room)
         socket?.emit('joinRoom', room, (room) => {
           console.log(room)
-          setchatRooms([...chatRooms, room])
+          setRooms([...rooms, room])
         })
       } else {
         console.log(`room must not be an empty string like '${room}'`)
@@ -87,7 +77,7 @@ export default function Jukebox ({ setSongList, songList, chatRooms, setchatRoom
     console.log(roomRef.current.value)
     socket?.emit('joinRoom', room, (room) => {
       console.log(room)
-      setchatRooms([...chatRooms, room])
+      setRooms([...rooms, room])
     })
   }
   return (

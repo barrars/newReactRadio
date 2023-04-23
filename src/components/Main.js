@@ -6,13 +6,11 @@ import { loadChats, getSongs } from '../API'
 import Jukebox from './jukebox/Jukebox'
 import { useOnlineStatus } from '../helpers/useOnlineStatus'
 import Tabs from './tabs/Tabs'
-// import socket from '../socket/socket'
 
 let loadingChats = false
 
 export default function Main ({ username }) {
   const online = useOnlineStatus()
-  const [chatRooms, setchatRooms] = useState(['main'])
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
 
@@ -32,8 +30,8 @@ export default function Main ({ username }) {
 
   return (
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
-      <Tabs rooms={chatRooms} setchatRooms={setchatRooms} />
-      <Jukebox chatRooms={chatRooms} setchatRooms={setchatRooms} setSongList={setSongList} songList={songList} />
+      <Tabs />
+      <Jukebox setSongList={setSongList} songList={songList} />
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
         <Chats chats={chats} username={username} />
 
@@ -42,7 +40,7 @@ export default function Main ({ username }) {
         </div>
       </div>
       <div className='bg-red-400 '>
-        <ChatBox chatRooms={chatRooms} setChats={setChats} chats={chats} username={username} />
+        <ChatBox setChats={setChats} chats={chats} username={username} />
       </div>
     </div>
   )

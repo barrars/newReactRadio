@@ -1,52 +1,43 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Main from './components/Main'
-import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
 import useSocket from './hooks/useSocket'
+import useLocalStorage from './hooks/useLocalStorage'
+import UseRooms from './hooks/UseRooms'
 const App = () => {
+  const { setRooms } = UseRooms()
   const socket = useSocket()
-  const [username, setUsername] = useState('')
-  const online = useOnlineStatus()
+  const [username, setUsername] = useLocalStorage('username', '')
   const inputEl = useRef(null)
   useEffect(() => {
     inputEl?.current?.focus()
-    // if (!socket) return
     if (!username) return
     socket?.on('connect', () => {
       socket.username = username
+      socket.emit('join', socket.username, res => {
+        setRooms(res)
+        console.log({ res })
+      })
       console.log('id = ' + socket.id + ' connected')
     })
-  }, [username])
-
-  // useEffect(() => {
-  //   // socket.connect(username)
-  //   if (username !== '' && online) {
-  //     socket.username = username
-  //     console.log(socket.username)
-  //     // console.log(socket.data)
-  //     socket.emit('join', socket.username,
-  //       res => console.log({ res }))
-  //   }
-  //   socket.on('connect_error', (err) => {
-  //     console.log('connection error, failed to connect')
-  //     console.log(err)
-  //     socket.disconnect()
-  //     socket.close()
-  //     socket.removeAllListeners()
-  //   })
-  //   socket.on('disconnect', () => {
-  //     console.log('DISCONNECTED')
-  //   })
-
-  //   return () => {
-  //     socket.off('connect_error')
-  //     socket.off('join')
-  //     console.log('disconnecting')
-  //     socket.off('connect')
-  //     socket.off('disconnect')
-  //   }
-  // }, [username, online, socket])
+    socket?.on('connect_error', (err) => {
+      console.log('connection error, failed to connect')
+      console.log(err)
+      socket.disconnect()
+      socket.close()
+      socket.removeAllListeners()
+    })
+    socket?.on('disconnect', () => {
+      console.log('DISCONNECTED')
+    }
+    )
+    return () => {
+      socket?.off('connect_error')
+      socket?.off('join')
+      console.log('disconnecting')
+      socket?.off('connect')
+    }
+  }, [username, socket])
 
   return (
 
@@ -63,7 +54,9 @@ const App = () => {
         </div>}
       {username !== '' && (
         <div>
-          <Main username={username} />
+          <output/>
+
+          <Main username={username} room={UseRooms}/>
         </div>
       )}
     </>

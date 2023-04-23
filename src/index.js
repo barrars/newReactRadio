@@ -1,18 +1,56 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import App from './App'
 import reportWebVitals from './reportWebVitals'
 import OnlineStatusProvider from './helpers/useOnlineStatus'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { loader as rootLoader, action as rootAction } from './routes/root'
+import ErrorPage from './error-page'
+// import Contact, { action as constactAction, loader as contactLoader } from './routes/contact'
+import EditContact, { action as editAction } from './routes/edit'
+// import { action as destroyAction } from './routes/destroy'
+import Index from './routes'
+import App from './App'
+import Main from './components/Main'
+// import { action as destroyAction } from './routes/destroy'
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
-
+const router = createBrowserRouter([{
+  path: '/',
+  element: <App />,
+  // element: <Root />,
+  errorElement: <ErrorPage />,
+  loader: rootLoader,
+  action: rootAction,
+  children: [{
+    path: '/:room',
+    element: <Main/>
+    // loader: contactLoader,
+    // action: constactAction
+  },
+  // {
+  //   path: '/contacts/:contactId/destroy',
+  //   action: destroyAction,
+  //   errorElement: <div>Oops! there was an error</div>
+  // },
+  {
+    path: '/contacts/:contactId/edit',
+    element: <EditContact/>,
+    // loader: contactLoader,
+    action: editAction
+  },
+  {
+    index: true,
+    element: <Index/>
+  }]
+}
+])
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <OnlineStatusProvider>
-    <App />
+    <RouterProvider router={router}/>
     </OnlineStatusProvider>
 
   </React.StrictMode>

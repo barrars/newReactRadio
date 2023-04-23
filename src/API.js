@@ -13,7 +13,6 @@ export const loadChats = async (setChats) => {
 
 export async function getSongs (setSongList) {
   const songs = await getSonglist()
-  console.info('settting songs', songs)
-  // console.info('settting songs')
+  // console.info('settting songs', songs)
   setSongList(songs)
 }
