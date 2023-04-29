@@ -8,24 +8,23 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { loader as rootLoader, action as rootAction } from './routes/root'
 import ErrorPage from './error-page'
 // import Contact, { action as constactAction, loader as contactLoader } from './routes/contact'
-import EditContact, { action as editAction } from './routes/edit'
+// import EditContact, { action as editAction } from './routes/edit'
 // import { action as destroyAction } from './routes/destroy'
 import Index from './routes'
 import App from './App'
-import Main from './components/Main'
 // import { action as destroyAction } from './routes/destroy'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/:roomid?',
     element: <App />,
     // element: <Root />,
     errorElement: <ErrorPage />,
     loader: rootLoader,
     action: rootAction,
     children: [{
-      path: '/:room',
-      element: <Main/>
+      // path: '/:room',
+      // element: <Main/>
     // loader: contactLoader,
     // action: constactAction
     },
@@ -34,12 +33,16 @@ const router = createBrowserRouter([
     //   action: destroyAction,
     //   errorElement: <div>Oops! there was an error</div>
     // },
-    {
-      path: '/contacts/:contactId/edit',
-      element: <EditContact/>,
-      // loader: contactLoader,
-      action: editAction
-    },
+    // {
+    //   path: '/room/:roomid',
+    //   element: <Main />
+    // },
+    // {
+    //   path: '/contacts/:contactId/edit',
+    //   element: <EditContact/>,
+    //   // loader: contactLoader,
+    //   action: editAction
+    // },
     {
       index: true,
       element: <Index/>
