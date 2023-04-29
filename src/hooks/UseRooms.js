@@ -1,6 +1,5 @@
-import { useState } from 'react'
-
+import useLocalStorage from './useLocalStorage'
 export default function UseRooms () {
-  const [rooms, setRooms] = useState([])
+  const [rooms, setRooms] = useLocalStorage('rooms', ['main', 'scott'])
   return { rooms, setRooms }
 }

@@ -11,7 +11,7 @@ export default function SongList ({ songList, username }) {
   const [cachedSongs, setCachedSongs] = useState([])
   useEffect(() => {
     mainStore.keys().then(keys => {
-      console.log('main store ', keys)
+      // console.log('main store ', keys)
       setCachedSongs(keys)
     })
   }, [])
@@ -37,14 +37,14 @@ export default function SongList ({ songList, username }) {
   return (
     <>
       {currentSong && <audio autoPlay controls src={`${produrl}/downloads/${currentSong}`} />}
-    {playCachedSong && <audio autoPlay controls src={playCachedSong} />}
+      {playCachedSong && <audio autoPlay controls src={playCachedSong} />}
       {online && songList.length > 0 && songList.map((song, i) =>
         <Song key={i} song={song} name={song.fileName} click={songClickHandler} cached={cachedSongs.includes(song.fileName) ? 'Cached' : 'not cachaed'} cacheSongHandler={cacheSongHandler} deleteSongHandler={deleteSongHandler} mainStore={mainStore} setCachedSongs={setCachedSongs} />)
       }
       {!online && cachedSongs.length > 0 && cachedSongs.map((song, i) => {
         console.log(song)
         return (
-        <Song key={i} song={song} name={song} click={songClickHandler} cached={cachedSongs.includes(song) ? 'Cached' : 'not cachaed'} cacheSongHandler={cacheSongHandler} deleteSongHandler={deleteSongHandler} mainStore={mainStore} setCachedSongs={setCachedSongs} />
+          <Song key={i} song={song} name={song} click={songClickHandler} cached={cachedSongs.includes(song) ? 'Cached' : 'not cachaed'} cacheSongHandler={cacheSongHandler} deleteSongHandler={deleteSongHandler} mainStore={mainStore} setCachedSongs={setCachedSongs} />
         )
       })
       }

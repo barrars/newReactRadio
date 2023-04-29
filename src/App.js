@@ -1,52 +1,66 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Main from './components/Main'
-import { useOnlineStatus } from './helpers/useOnlineStatus'
 import { inputName } from './helpers/methods'
 import useSocket from './hooks/useSocket'
+import useLocalStorage from './hooks/useLocalStorage'
 const App = () => {
   const socket = useSocket()
-  const [username, setUsername] = useState('')
-  const online = useOnlineStatus()
+  // console.log({ id: socket?.id, username: socket?.username })
+
+  const [rooms, setRooms] = useLocalStorage('rooms', ['main'])
+  // console.log(rooms)
+  const [username, setUsername] = useLocalStorage('username', '')
+
   const inputEl = useRef(null)
   useEffect(() => {
-    inputEl?.current?.focus()
-    // if (!socket) return
-    if (!username) return
-    socket?.on('connect', () => {
-      socket.username = username
-      console.log('id = ' + socket.id + ' connected')
+    // console.log(socket)
+    if (!socket) return
+    if (rooms.length === 0) {
+      setRooms(['main'])
+    }
+    // if nav at / root navigate to /main
+    if (window.location.pathname === '/') {
+      window.location.pathname = '/main'
+    }
+    rooms.forEach(room => {
+      // console.log(room)
+      socket.emit('join', room, (room) => {
+        // console.log(`joined room ${room}`)
+      })
     })
-  }, [username])
+    inputEl?.current?.focus()
+    if (!username) return
+    socket.on('connect', () => {
+      // console.log(socket)
+      socket.username = username
+      socket.emit('join', socket.username, res => {
+        // console.log({ res })
+      })
+      // console.log('id = ' + socket.id + ' connected')
+    })
+    socket.on('welcome', (msg) => {
+      // console.log('welcome message from server')
 
-  // useEffect(() => {
-  //   // socket.connect(username)
-  //   if (username !== '' && online) {
-  //     socket.username = username
-  //     console.log(socket.username)
-  //     // console.log(socket.data)
-  //     socket.emit('join', socket.username,
-  //       res => console.log({ res }))
-  //   }
-  //   socket.on('connect_error', (err) => {
-  //     console.log('connection error, failed to connect')
-  //     console.log(err)
-  //     socket.disconnect()
-  //     socket.close()
-  //     socket.removeAllListeners()
-  //   })
-  //   socket.on('disconnect', () => {
-  //     console.log('DISCONNECTED')
-  //   })
-
-  //   return () => {
-  //     socket.off('connect_error')
-  //     socket.off('join')
-  //     console.log('disconnecting')
-  //     socket.off('connect')
-  //     socket.off('disconnect')
-  //   }
-  // }, [username, online, socket])
+      // console.log(msg)
+    })
+    socket.on('connect_error', (err) => {
+      // console.log('connection error, failed to connect')
+      console.log(err)
+      socket.disconnect()
+      socket.close()
+      socket.removeAllListeners()
+    })
+    socket.on('disconnect', () => {
+      // console.log('DISCONNECTED')
+    }
+    )
+    return () => {
+      socket.off('connect_error')
+      socket.off('join')
+      console.log('disconnecting')
+      socket.off('connect!')
+    }
+  }, [username, socket, setRooms, rooms])
 
   return (
 
@@ -63,7 +77,9 @@ const App = () => {
         </div>}
       {username !== '' && (
         <div>
-          <Main username={username} />
+          {/* <Outlet username={username}/> */}
+
+          <Main username={username} rooms={rooms} setRooms={setRooms} socket={socket}/>
         </div>
       )}
     </>

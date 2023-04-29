@@ -1,6 +1,5 @@
 import React from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
-// import Socket from '../../socketService'
 
 export default function Chats ({ chats, username }) {
   const online = useOnlineStatus()
