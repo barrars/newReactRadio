@@ -11,10 +11,9 @@ export default function ChatBox ({ socket, setChats, chats, username, rooms, set
     socket.on('chat message', (data) => {
       console.log(chats)
       console.log('chat message', data)
-      // const { chatRoom, message, username } = data
-      // console.log(`received message via sockets from: ${JSON.stringify(newChat)}, in room: ${chatRoom}`)
-      // console.log(`in chat room ${chatRoom}`)
-      // if (chatRoom !== roomid) return
+      const { chatRoom } = data
+      /* if not currently in this that chatroom return */
+      if (chatRoom !== roomid) return
       setChats([...chats, data])
     })
     socket.on('roommsg', (msg) => {
@@ -53,7 +52,8 @@ export default function ChatBox ({ socket, setChats, chats, username, rooms, set
             return
           }
           console.log(`your msg posted succesfully via post: ${JSON.stringify(data)}`)
-          socket.emit('sendMessage', { username, message, room })
+          /* test */
+          // socket.emit('sendMessage', { username, message, room })
         })
       e.target.value = ''
     }

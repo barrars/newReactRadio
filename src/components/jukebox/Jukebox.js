@@ -1,35 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
 // import { useNavigate } from 'react-router-dom'
 
 export default function Jukebox ({ setSongList, songList, rooms, setRooms, socket }) {
-  // const roomRef = useRef(null)
-  // const navigate = useNavigate()
-  // const addRoom = (room) => {
-  //   if (room !== '' && !rooms.includes(room)) {
-  //     console.log('emit join-room with data: ', room)
-  //     socket.emit('join', room, (room) => {
-  //       console.log(room)
-  //       roomRef.current.value = ''
-  //       setRooms([...rooms, room])
-  //       navigate(`/${room}`)
-  //     })
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   socket.on('song', ({ song }) => {
-  //     console.log('song', { song, status })
-  //     console.log('songList', songList)
-  //     setSongList([...songList, song])
-  //   })
-  //   socket.on('click', (data) => {
-  //     console.log('click', data)
-  //   })
-  //   socket.on('eta', (data) => {
-  //     console.log('eta', data)
-  //   })
-  // }, [socket, songList])
+  useEffect(() => {
+    socket?.on('song', ({ song }) => {
+      console.log('song', { song, status })
+      setSongList((prev) => [...prev, song])
+      console.log('songList', songList)
+      // setSongList([...songList, song])
+    })
+    socket?.on('click', (data) => {
+      console.log('click', data)
+    })
+    socket?.on('eta', (data) => {
+      console.log('eta', data)
+    })
+    return () => {
+      socket?.off('song')
+      socket?.off('click')
+      socket?.off('eta')
+    }
+  }, [socket, songList])
   const online = useOnlineStatus()
   const [downloading, setDownloading] = useState(false)
   const search = (e) => {
@@ -38,9 +30,11 @@ export default function Jukebox ({ setSongList, songList, rooms, setRooms, socke
       username: socket.username
     }
     if (e.key === 'Enter') {
+      console.log(socketOBJ)
+      if (e.target.value === '') return
       const val = e.target.value
       e.target.value = ''
-      // setDownloading(true)
+      setDownloading(true)
       fetch(process.env.REACT_APP_URL + '/search?q=' + val.trim(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +43,7 @@ export default function Jukebox ({ setSongList, songList, rooms, setRooms, socke
         .then((res) => res.json())
         .then((data) => {
           console.log(data)
-          setSongList([...songList, data])
+          // setSongList([...songList, data])
           setDownloading(false)
         })
     }
