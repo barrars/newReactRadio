@@ -15,12 +15,10 @@ export default function Main ({ username, socket, setRooms, rooms }) {
   const nav = useNavigate()
 
   const { roomid } = useParams()
-  console.log('roomid', roomid)
+  // console.log('roomid', roomid)
   const online = useOnlineStatus()
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
-  // console.log('room', roomid)
-  console.log(roomid)
   // if (roomid === undefined) {
   //   nav('/main')
   // }
@@ -47,8 +45,10 @@ export default function Main ({ username, socket, setRooms, rooms }) {
   return (
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
       <Tabs rooms={rooms} setRooms={setRooms} socket={socket}/>
+
       <Jukebox socket={socket} setSongList={setSongList} songList={songList} rooms={rooms} setRooms={setRooms}/>
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
+
         <Chats socket={socket} chats={chats} username={username} rooms={rooms} setRooms={setRooms} />
 
         <div className='col-span-1 bg-slate-200 overflow-x-hidden  '>
