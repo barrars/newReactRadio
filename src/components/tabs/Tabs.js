@@ -10,7 +10,7 @@ export default function Tabs ({ rooms, setRooms, socket }) {
     console.log('add room', room)
     if (room !== '' && !rooms.some(obj => obj.room === room)) {
       console.log('emit join-room with data: ', room)
-      socket.emit('join', room, ({ room, count }) => {
+      socket.emit('join', room, (room, count) => {
         console.log(room)
         roomRef.current.value = ''
         setRooms([...rooms, { room, users: count, unread: false }])
@@ -25,9 +25,9 @@ export default function Tabs ({ rooms, setRooms, socket }) {
   }
   const joinRoom = (room) => {
     // if room is not in rooms, add it
-    if (!rooms.includes(room)) {
+    if (!rooms.includes(room.room)) {
       console.log(`join room ${room}`)
-      socket.emit('join', room, ({ room, count }) => {
+      socket.emit('join', room, (room, count) => {
         console.log(room, count)
         roomRef.current.value = ''
         // setRooms([...rooms, { room, users: [], unread: false }])
@@ -51,6 +51,7 @@ export default function Tabs ({ rooms, setRooms, socket }) {
       <div className='flex flex-grow'>
 
         {rooms.map((room, i) => {
+          console.log(room)
           const thisRoom = room.room
           return (
             <div key={`${room.room + i}`} className='relative group '>

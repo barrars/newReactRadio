@@ -7,15 +7,14 @@ import { loadChats, getSongs } from '../API'
 import Jukebox from './jukebox/Jukebox'
 import { useOnlineStatus } from '../helpers/useOnlineStatus'
 import Tabs from './tabs/Tabs'
-import { useNavigate, useParams } from 'react-router-dom'
-
-let loadingChats = true
+import { useLocation } from 'react-router-dom'
 
 export default function Main ({ username, socket, setRooms, rooms }) {
-  const nav = useNavigate()
+  // get navigator location
+  const pathname = useLocation().pathname.split('/')[1]
+  // get roomid from url
+  console.log('pathname', pathname || '/')
 
-  const { roomid } = useParams()
-  // console.log('roomid', roomid)
   const online = useOnlineStatus()
   const [songList, setSongList] = useState([])
   const [chats, setChats] = useState([])
@@ -27,14 +26,12 @@ export default function Main ({ username, socket, setRooms, rooms }) {
     const id = socket?.id
 
     if (online) {
-      console.log(`loading chats for ${roomid} and ${id}`)
-      getSongs(setSongList, roomid === undefined ? '/main' : roomid)
-      loadChats(setChats, roomid === undefined ? '/main' : roomid, id)
-    } else {
-      loadingChats = !!online
+      console.log(`loading chats for ${pathname} and ${id}`)
+      getSongs(setSongList, pathname === undefined ? '/main' : pathname)
+      loadChats(setChats, pathname === undefined ? '/main' : pathname, id)
     }
   },
-  [online, socket, roomid])
+  [online, socket, pathname])
   // [online, roomid, socket, loadChats, getSongs, nav, setRooms, rooms, username, setChats, setSongList, songList, chats])
 
   useEffect(() => {

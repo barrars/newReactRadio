@@ -9,7 +9,6 @@ export default function OnlineStatusProvider ({ children }) {
     window.addEventListener('offline', () => setOnlineStatus(false))
 
     return () => {
-      console.log('cleaning up')
       window.removeEventListener('online', () => setOnlineStatus(true))
       window.removeEventListener('offline', () => setOnlineStatus(false))
     }
