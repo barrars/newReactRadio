@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-export default function ChatBox ({ socket, setChats, chats, username, rooms, setRooms }) {
+export default function ChatBox ({ socket, chats, setChats, username, localStorageRoomsArr }) {
   const { roomid } = useParams()
 
   useEffect(() => {
@@ -33,9 +33,9 @@ export default function ChatBox ({ socket, setChats, chats, username, rooms, set
   }, [socket, chats, setChats])
 
   const chatHandler = (e) => {
-    const room = roomid === undefined ? '' : roomid
-    console.log('room', room)
     if (e.key === 'Enter' && e.target.value !== '') {
+      const room = roomid === undefined ? '' : roomid
+      console.log('room', room)
       console.log(socket.id)
       const message = e.target.value
       fetch(process.env.REACT_APP_URL + '/chatList/' + room, {
@@ -43,7 +43,7 @@ export default function ChatBox ({ socket, setChats, chats, username, rooms, set
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, message, rooms, id: socket.id })
+        body: JSON.stringify({ username, message, localStorageRoomsArr, id: socket.id })
       })
         .then(res => res.json())
         .then(data => {
