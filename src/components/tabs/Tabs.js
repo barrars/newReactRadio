@@ -1,36 +1,44 @@
 import React, { useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-export default function Tabs ({ rooms, setRooms, socket }) {
+export default function Tabs ({ localStorageRoomsArr, setlocalStorageRoomsArr, socket, roomTabs, setroomTabs }) {
   const navigate = useNavigate()
   const roomRef = useRef(null)
-  console.log('rooms', rooms)
+  // console.log('local storage rooms', localStorageRoomsArr)
 
   const addRoom = (room) => {
     console.log('add room', room)
-    if (room !== '' && !rooms.some(obj => obj.room === room)) {
+    if (room !== '' && !localStorageRoomsArr.includes(room)) {
       console.log('emit join-room with data: ', room)
-      socket.emit('join', room, (room, count) => {
-        console.log(room)
+      socket.emit('join', '4444', room, (room, count) => {
+        console.log(`emitted join ${room}`)
         roomRef.current.value = ''
-        setRooms([...rooms, { room, users: count, unread: false }])
+        setlocalStorageRoomsArr([...localStorageRoomsArr, room])
+        setroomTabs([...roomTabs, { room, users: count }])
         navigate(`/${room}`)
       })
     }
   }
   const removeRoom = (room) => {
     console.log('remove room', room)
-    setRooms(rooms.filter(r => r !== room))
-    navigate('/')
+    if (room === 'main') return
+    if (room === socket.username) return
+    roomTabs.splice(roomTabs.findIndex(obj => obj.room === room), 1)
+    setroomTabs([...roomTabs])
+    setlocalStorageRoomsArr(localStorageRoomsArr.filter(r => r !== room))
+    navigate('/main')
   }
   const joinRoom = (room) => {
+    console.log(`clicked on tab to join room: ${room}`)
     // if room is not in rooms, add it
-    if (!rooms.includes(room.room)) {
+    const roomExists = localStorageRoomsArr.includes(room)
+    if (!roomExists) {
       console.log(`join room ${room}`)
-      socket.emit('join', room, (room, count) => {
+      socket.emit('join', '5555', room, (room, count) => {
         console.log(room, count)
         roomRef.current.value = ''
-        // setRooms([...rooms, { room, users: [], unread: false }])
+        setlocalStorageRoomsArr([...localStorageRoomsArr, room])
+        setroomTabs([...roomTabs, { room, users: count }])
         navigate(`/${room}`)
       })
     }
@@ -50,16 +58,16 @@ export default function Tabs ({ rooms, setRooms, socket }) {
 
       <div className='flex flex-grow'>
 
-        {rooms.map((room, i) => {
-          console.log(room)
+        {roomTabs.map((room, i) => {
+          console.log(`roomTab ${i} is named ${room.room} and has ${room.users} users`) /* {room: 'main', users: 0} */
           const thisRoom = room.room
           return (
-            <div key={`${room.room + i}`} className='relative group '>
+            <div key={`${room.room + i}`} className='relative group select-none '>
 
-              <NavLink onClick={() => joinRoom(thisRoom)} to={`/${thisRoom}`} className={({ isActive }) => ' rounded-t-2xl py-2 px-4 text-sm font-semibold text-gray-700 border-2 border-gray-300 bg-white' + (isActive ? 'bg-slate-500' : '')}>
+              <NavLink onClick={() => joinRoom(thisRoom)} to={`/${thisRoom}`} className={({ isActive }) => ' rounded-t-2xl py-2 px-4 text-sm font-semibold text-gray-700 border-2 border-gray-300 bg-white' + (isActive ? 'bg-slate-500 pointer-events-none' : '') } >
                 {`${thisRoom} (${room.users})`}
               </NavLink>
-              <i onClick={() => removeRoom(room)} className=' -top-1 right-1 absolute rounded-xl cursor-pointer invisible group-hover:visible '>x</i>
+              <i onClick={() => removeRoom(thisRoom)} className=' -top-1 right-1 absolute rounded-xl cursor-pointer invisible group-hover:visible '>x</i>
             </div>
           )
         })}

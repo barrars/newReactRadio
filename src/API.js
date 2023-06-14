@@ -1,11 +1,11 @@
 import getSonglist from './helpers/getSongList'
 
 export async function loadChats (setChats, room, socketID) {
-  console.log('getting chats!! ' + room + ' ' + socketID)
+  // console.log('getting chats!! ' + room + ' ' + socketID)
   // let chats = await fetch('https://chat-radio.com/chatList')
   // if no socket return
   if (!socketID) return
-  console.log('socketIiD', socketID)
+  // console.log('socketIiD', socketID)
 
   try {
     const chats = await fetch(`${process.env.REACT_APP_URL}/chatList/${room}`)

@@ -1,7 +1,12 @@
-set username of socket in localstorage
+the 'joined' event is causing an error where
+the other users being made aware of the new user joining
+is causing those users to only have that tab open
 
-  prevent spaces being sent as messages
 
-note working:
-  loading local store songs when offline
-#ignore
+** also need to get a first time load to join rooms
+  specifically for the main room
+
+**first time users arent getting their sockets to join
+the main room or other rooms
+
+

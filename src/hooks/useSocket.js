@@ -23,6 +23,10 @@ const useSocket = (url = process.env.REACT_APP_SOCKET) => {
     // If the socket instance is not available, create one
     if (!socketInstance) {
       socketInstance = io(url, {
+        reconnection: true,
+        reconnectionDelay: 500,
+        reconnectionAttempts: Infinity,
+        autoConnect: false,
         query: {
           socketId
         }
