@@ -22,7 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode/launch.json
-src/helpers/getSongList.js
 ./env
 notes
 ./notes
