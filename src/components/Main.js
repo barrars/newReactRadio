@@ -22,14 +22,15 @@ export default function Main ({ setroomTabs, username, roomTabs, localStorageRoo
   //   nav('/main')
   // }
   useEffect(() => {
-    if (!socket) return
-    const id = socket?.id
-
-    if (online && id) {
-      console.log(`loading chats and songs for ${pathname} and ${id}`)
-      getSongs(setSongList, pathname === undefined ? '/main' : pathname)
-      loadChats(setChats, pathname === undefined ? '/main' : pathname, id)
-    }
+    console.log(pathname)
+    // if (!socket) return
+    const username = socket?.username
+    console.log(`online is ${online} and id is ${username}`)
+    console.log(`loading chats and songs for ${pathname} and ${username}`)
+    getSongs(setSongList, pathname === undefined ? '/main' : pathname)
+    loadChats(setChats, pathname === undefined ? '/main' : pathname, username)
+    // if (online && username) {
+    // }
   },
   [online, socket, pathname])
   // [online, roomid, socket, loadChats, getSongs, nav, setRooms, rooms, username, setChats, setSongList, songList, chats])

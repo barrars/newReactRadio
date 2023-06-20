@@ -23,11 +23,22 @@ export default function Tabs ({ localStorageRoomsArr, setlocalStorageRoomsArr, s
     console.log('remove room', room)
     if (room === 'main') return
     if (room === socket.username) return
-    roomTabs.splice(roomTabs.findIndex(obj => obj.room === room), 1)
-    setroomTabs([...roomTabs])
-    setlocalStorageRoomsArr(localStorageRoomsArr.filter(r => r !== room))
-    navigate('/main')
+    socket.emit('leave', room, (room) => {
+      console.log(`before leaving ${roomTabs}`)
+      roomTabs.splice(roomTabs.findIndex(obj => obj.room === room), 1)
+      console.log(`removed room ${room}`, roomTabs)
+      setroomTabs([...roomTabs])
+      setlocalStorageRoomsArr(localStorageRoomsArr.filter(r => r !== room))
+      navigate('/main')
+    })
   }
+  socket?.on('left', ({ room, count }) => {
+    console.log(`left room ${room}, count is ${count}`)
+    // set count for room in roomTabs
+    const roomTab = roomTabs.findIndex(obj => obj.room === room)
+    roomTabs[roomTab] = { room, users: count }
+    setroomTabs([...roomTabs])
+  })
   const joinRoom = (room) => {
     console.log(`clicked on tab to join room: ${room}`)
     // if room is not in rooms, add it

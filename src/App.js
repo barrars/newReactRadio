@@ -8,18 +8,19 @@ const App = () => {
   const [roomTabs, setroomTabs] = useState([{ room: 'main', users: 1 }])
   console.log(`localStorageRoomsArr type is ${typeof (localStorageRoomsArr)}`)
   const [username, setUsername] = useLocalStorage('username', null)
+  // eslint-disable-next-line no-unused-vars
   const [socketConnection, setSocketConnection] = useState('false')
+  // eslint-disable-next-line no-unused-vars
   const [socketId, setSocketId] = useState('')
   const inputEl = useRef(null)
   const socket = useSocket()
   inputEl?.current?.focus()
   useEffect(() => {
     if (!username) return
+    // open socket connection
     socket?.connect()
     console.log(`username is ${username}`)
     if (!socket) return
-
-    // open socket connection
 
     socket?.on('connect', () => {
       console.log('connected')
@@ -82,26 +83,14 @@ const App = () => {
     // })
 
     socket.on('joined', ({ room, count, from }) => {
-      console.log('socket joined', { room, count, from })
-      // increment users in room
-      // setroomTabs([...roomTabs, { room, users: count }])
-      setroomTabs(roomTabs.map(roomTab => {
-        console.log(`roomTab ${JSON.stringify(roomTab)}`)
-        if (roomTab.room === room) {
-          return { ...roomTab, users: count }
-        } else {
-          return roomTab
-        }
-      }))
-      // setRooms(rooms.map(obj => {
-      //   if (obj.room === room) {
-      //     console.log('found room' + JSON.stringify({ ...obj, users: count }))
-      //     return { ...obj, users: count }
-      //   } else {
-      //     return obj
-      //   }
-      // }))
+      console.log('socket  received joined event', { room, count, from })
+      // increment count in room
+      const index = roomTabs.findIndex(obj => obj.room === room)
+      roomTabs[index] = { room, users: count }
+      console.log(`roomTabs is ${roomTabs}`)
+      setroomTabs([...roomTabs])
     })
+
     socket.on('connect_error', (err) => {
       // console.log('connection error, failed to connect')
       console.log(err)
@@ -140,12 +129,11 @@ const App = () => {
       {username !== null && (
         <div>
           {/* <Outlet username={username}/> */}
-          <p>socket connected?  {socketConnection} id = {socketId}</p>
+          {/* <p>socket connected?  {socketConnection} id = {socketId}</p> */}
           <Main setroomTabs={setroomTabs} username={username} roomTabs={roomTabs} localStorageRoomsArr={localStorageRoomsArr} setlocalStorageRoomsArr={setlocalStorageRoomsArr} socket={socket} />
         </div>
       )}
     </>
   )
 }
-
 export default App
