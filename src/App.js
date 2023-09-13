@@ -6,7 +6,7 @@ import useLocalStorage from './hooks/useLocalStorage'
 const App = () => {
   const [localStorageRoomsArr, setlocalStorageRoomsArr] = useLocalStorage('rooms', ['main'])
   const [roomTabs, setroomTabs] = useState([{ room: 'main', users: 1 }])
-  console.log(`localStorageRoomsArr type is ${typeof (localStorageRoomsArr)}`)
+  // console.log(`localStorageRoomsArr type is ${typeof (localStorageRoomsArr)}`)
   const [username, setUsername] = useLocalStorage('username', null)
   // eslint-disable-next-line no-unused-vars
   const [socketConnection, setSocketConnection] = useState('false')
@@ -33,23 +33,22 @@ const App = () => {
       window.location.pathname = '/main'
     }
     socket.username = username
-    // if socket set socket.username to username
 
-    localStorageRoomsArr.forEach((room, i) => {
-      console.log(`localStorageRoomsArr index ${i} is ${room}`)
-      socket.emit('join', '1111', room, (r, c) => {
-        console.log(`joined room ${r} from localstorage, count is ${c}`)
-        // find the obj in roomTabs array and set count to c
-        // const roomTab = roomTabs.findIndex(obj => obj.room === r) >=0 ? roomTabs.findIndex(obj => obj.room === r) : false
-        //  const index = roomTab === false ? roomTabs.findIndex(obj => obj.room === 'main') : roomTab
-        // console.log(`index is ${i}`)
-        // const newRoomTabs = [...roomTabs]
-
-        roomTabs[i] = { room: r, users: c }
-
-        setroomTabs([...roomTabs])
-        // setroomTabs([...roomTabs, { room, users: c }])
+    // Map over the rooms and for each room, return a promise
+    const promises = localStorageRoomsArr.map((room, i) => {
+      return new Promise((resolve, reject) => {
+        socket.emit('join', '1111', room, (r, c) => {
+          console.log(r, c)
+          console.log(`joined room ${r} from localstorage, count is ${c}`)
+          roomTabs[i] = { room: r, users: c }
+          resolve() // Resolve the promise when the callback is called
+        })
       })
+    })
+
+    // Once all promises are resolved, update the state
+    Promise.all(promises).then(() => {
+      setroomTabs([...roomTabs])
     })
     // check  rooms array includes username
     if (!localStorageRoomsArr.includes(username)) {
@@ -60,27 +59,6 @@ const App = () => {
         setroomTabs([...roomTabs, { room, users: count }])
       })
     }
-
-    /* keep this */
-    // if (!rooms.some(obj => obj.room === username)) {
-    //   // if not, join and add it
-    //   socket.emit('join', '2222', username, (room, count) => {
-    //     console.log(`joined room ${room}, count is ${count}`)
-    //     setRooms([...rooms, { room, users: count, unread: false }])
-    //   })
-    // }
-
-    // socket.emit('join', '3333', username, (room, count) => {
-    //   // if doesnt room already exists
-    //   if (room !== '' && !rooms.some(obj => obj.room === room)) {
-    //     // add room to rooms
-    //     setRooms([...rooms, { room, users: count, unread: false }])
-    //     console.log('ack from 333')
-    //     console.log({ room, count })
-    //   }
-    // })
-    // socket.on('connect', () => {
-    // })
 
     socket.on('joined', ({ room, count, from }) => {
       console.log('socket  received joined event', { room, count, from })
@@ -130,7 +108,7 @@ const App = () => {
         <div>
           {/* <Outlet username={username}/> */}
           {/* <p>socket connected?  {socketConnection} id = {socketId}</p> */}
-          <Main setroomTabs={setroomTabs} username={username} roomTabs={roomTabs} localStorageRoomsArr={localStorageRoomsArr} setlocalStorageRoomsArr={setlocalStorageRoomsArr} socket={socket} />
+          <Main setroomTabs={setroomTabs} username={username} roomTabs={roomTabs} localStorageRoomsArr={localStorageRoomsArr} setlocalStorageRoomsArr={setlocalStorageRoomsArr} socket={socket} socketConnection={socketConnection} setSocketConnection={setSocketConnection} socketId={socketId} />
         </div>
       )}
     </>

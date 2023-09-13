@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useOnlineStatus } from '../../helpers/useOnlineStatus'
 // import { useNavigate } from 'react-router-dom'
 
-export default function Jukebox ({ setSongList, songList, rooms, setRooms, socket }) {
+export default function Jukebox ({ setSongList, songList, rooms, setRooms, socket, socketId, setSocketConnection, socketConnection }) {
   useEffect(() => {
     socket?.on('song', ({ song }) => {
       console.log('song', { song, status })
@@ -74,6 +74,8 @@ export default function Jukebox ({ setSongList, songList, rooms, setRooms, socke
           enter
         </button> */}
         <p className={` h-2 w-2 rounded-full ${online ? 'bg-green-500' : 'bg-red-500'}`} />
+        <p>socket connected?  {socketConnection} id = {socketId}</p>
+
       </div>
   )
 }

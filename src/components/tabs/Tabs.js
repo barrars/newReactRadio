@@ -39,20 +39,22 @@ export default function Tabs ({ localStorageRoomsArr, setlocalStorageRoomsArr, s
     roomTabs[roomTab] = { room, users: count }
     setroomTabs([...roomTabs])
   })
+
   const joinRoom = (room) => {
     console.log(`clicked on tab to join room: ${room}`)
     // if room is not in rooms, add it
-    const roomExists = localStorageRoomsArr.includes(room)
-    if (!roomExists) {
-      console.log(`join room ${room}`)
-      socket.emit('join', '5555', room, (room, count) => {
-        console.log(room, count)
-        roomRef.current.value = ''
-        setlocalStorageRoomsArr([...localStorageRoomsArr, room])
-        setroomTabs([...roomTabs, { room, users: count }])
-        navigate(`/${room}`)
-      })
-    }
+    // const roomExists = localStorageRoomsArr.includes(room)
+    // if (!roomExists) {
+    // if () {
+    // }
+    console.log(`join room ${room}`)
+    socket.emit('join', '5555', room, (room, count) => {
+      console.log(room, count)
+      roomRef.current.value = ''
+      // setlocalStorageRoomsArr([...localStorageRoomsArr, room])
+      // setroomTabs([...roomTabs, { room, users: count }])
+      navigate(`/${room}`)
+    })
   }
   const enterRoom = (e) => {
     if (e.key === 'Enter') {
@@ -70,15 +72,14 @@ export default function Tabs ({ localStorageRoomsArr, setlocalStorageRoomsArr, s
       <div className='flex flex-grow'>
 
         {roomTabs.map((room, i) => {
-          console.log(`roomTab ${i} is named ${room.room} and has ${room.users} users`) /* {room: 'main', users: 0} */
-          const thisRoom = room.room
           return (
-            <div key={`${room.room + i}`} className='relative group select-none '>
 
-              <NavLink onClick={() => joinRoom(thisRoom)} to={`/${thisRoom}`} className={({ isActive }) => ' rounded-t-2xl py-2 px-4 text-sm font-semibold text-gray-700 border-2 border-gray-300 bg-white' + (isActive ? 'bg-slate-500 pointer-events-none' : '') } >
-                {`${thisRoom} (${room.users})`}
+              <div key={`${room.room + i}`} className='relative group select-none '>
+
+              <NavLink onClick={() => joinRoom(room.room)} to={`/${room.room}`} className={({ isActive }) => ' rounded-t-2xl py-2 px-4 text-sm font-semibold text-gray-700 border-2 border-gray-300 bg-white' + (isActive ? 'bg-slate-500 pointer-events-none' : '') } >
+                {`${room.room} (${room.users})`}
               </NavLink>
-              <i onClick={() => removeRoom(thisRoom)} className=' -top-1 right-1 absolute rounded-xl cursor-pointer invisible group-hover:visible '>x</i>
+              <i onClick={() => removeRoom(room.room)} className=' -top-1 right-1 absolute rounded-xl cursor-pointer invisible group-hover:visible '>x</i>
             </div>
           )
         })}

@@ -9,7 +9,7 @@ import { useOnlineStatus } from '../helpers/useOnlineStatus'
 import Tabs from './tabs/Tabs'
 import { useLocation } from 'react-router-dom'
 
-export default function Main ({ setroomTabs, username, roomTabs, localStorageRoomsArr, setlocalStorageRoomsArr, socket }) {
+export default function Main ({ setroomTabs, username, roomTabs, localStorageRoomsArr, setlocalStorageRoomsArr, socket, setSocketConnection, socketConnection, socketId }) {
   // get navigator location
   const pathname = useLocation().pathname.split('/')[1]
   // get roomid from url
@@ -23,7 +23,7 @@ export default function Main ({ setroomTabs, username, roomTabs, localStorageRoo
   // }
   useEffect(() => {
     console.log(pathname)
-    // if (!socket) return
+    if (!socket?.username) return
     const username = socket?.username
     console.log(`online is ${online} and id is ${username}`)
     console.log(`loading chats and songs for ${pathname} and ${username}`)
@@ -44,7 +44,7 @@ export default function Main ({ setroomTabs, username, roomTabs, localStorageRoo
     <div className='h-screen grid grid-rows-[repeat(12,_minmax(0,_1fr))]'>
       <Tabs localStorageRoomsArr={localStorageRoomsArr} setlocalStorageRoomsArr={setlocalStorageRoomsArr} socket={socket} roomTabs={roomTabs} setroomTabs={setroomTabs}/>
 
-      <Jukebox socket={socket} setSongList={setSongList} songList={songList}/>
+      <Jukebox socket={socket} setSongList={setSongList} songList={songList} socketConnection={socketConnection} setSocketConnection={setSocketConnection} socketId={socketId}/>
       <div className='row-[span_10_/_span_10] grid grid-cols-2'>
 
         <Chats chats={chats}/>
